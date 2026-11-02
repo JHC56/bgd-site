@@ -355,3 +355,6 @@ code{ font-family:ui-monospace,Consolas,monospace; font-size:.9em; background:va
   .sensors .tile{ border-left:0 !important; }
   .sensors .tile:nth-child(even){ border-left:2px solid var(--rule) !important; }
 }
+
+/* About: the three spec items sit side by side */
+.grid3 > .spec{ border-top:0; padding-top:0; }
