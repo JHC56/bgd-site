@@ -57,7 +57,7 @@ Each spot is judged by pH (6.5 to 8.5) and turbidity (15 NTU or less). Temperatu
 | Sensor lift pod | Lowers the sensors into the water at each spot and pulls them back up while the duck moves. | Keeps the probes clean and gives the same depth at every spot. |
 | ESP32-CAM + YOLO | Sends the duck's view over Wi-Fi. A laptop runs YOLO on the video to find floating trash. | Shown on the live page. Found objects are listed next to the video. |
 
-## Screens
+## Website
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/3df132ad-c124-4c7b-8ded-4580db589f37" width="100%" alt="Main page">
