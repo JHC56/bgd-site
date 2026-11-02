@@ -1,0 +1,38 @@
+name: 냄새·부유물 제보
+description: 인경호에서 냄새, 부유물, 물 색 변화 등을 봤을 때
+title: "[제보] "
+labels: ["제보"]
+body:
+  - type: dropdown
+    id: site
+    attributes:
+      label: 어디서 봤나요?
+      options:
+        - 1번 정문 수로
+        - 2번 하이테크관 앞
+        - 3번 후문 유입구
+        - 4번 인경호 중앙부
+        - 5번 5호관 앞
+        - 잘 모르겠음 / 기타
+    validations:
+      required: true
+  - type: checkboxes
+    id: kind
+    attributes:
+      label: 무엇을 봤나요?
+      options:
+        - label: 냄새
+        - label: 부유물·쓰레기
+        - label: 물 색 변화(초록색 등)
+        - label: 죽은 물고기
+        - label: 기타
+  - type: input
+    id: when
+    attributes:
+      label: 언제 봤나요?
+      placeholder: 예) 11월 6일 오후 3시쯤
+  - type: textarea
+    id: detail
+    attributes:
+      label: 자세한 내용
+      description: 사진이 있으면 여기에 끌어다 놓으세요.

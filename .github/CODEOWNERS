@@ -1,0 +1,7 @@
+# Owners of these paths. Add more maintainers by appending @username to each line.
+# PRs that change these paths need an owner's approval before merging
+# (takes effect once "Require review from Code Owners" is enabled in a branch rule for main).
+/reports/               @JHC56
+/config/criteria.json   @JHC56
+/scripts/               @JHC56
+/.github/               @JHC56
