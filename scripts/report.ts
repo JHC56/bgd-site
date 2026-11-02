@@ -64,7 +64,12 @@ function facts(j: Judgement) {
 async function askGitHub(j: Judgement): Promise<string> {
   const res = await fetch("https://models.github.ai/inference/chat/completions", {
     method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${KEY}` },
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      Authorization: `Bearer ${KEY}`,
+    },
     body: JSON.stringify({
       model: GH_MODEL,
       messages: [
@@ -73,8 +78,14 @@ async function askGitHub(j: Judgement): Promise<string> {
       ],
     }),
   });
-  if (!res.ok) throw new Error(`GitHub Models ${res.status}: ${(await res.text()).slice(0, 300)}`);
-  const data: any = await res.json();
+  const raw = await res.text();
+  if (!res.ok) throw new Error(`GitHub Models ${res.status}: ${raw.slice(0, 300)}`);
+  let data: any;
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    throw new Error(`GitHub Models returned non-JSON (status ${res.status}): ${JSON.stringify(raw.slice(0, 200))}`);
+  }
   const text = (data.choices?.[0]?.message?.content ?? "").trim();
   if (!text) throw new Error("GitHub Models returned an empty response");
   return text;
@@ -163,7 +174,7 @@ for (const f of targets) {
   console.log(`✓ ${j.id}  ${STATUS_KO[j.overall]}  (${writer})${suspect.length ? "  ! numbers to check: " + suspect.join(", ") : ""}`);
   pr.push(
     `| \`${j.id}\` | ${j.site_name} | ${STATUS_KO[j.overall]} | ${report.summary} | ${writer} | ${
-      suspect.length ? "⚠️ numbers not in the input: " + suspect.join(", ") : error ? "⚠️ AI failed, template text used" : "—"
+      suspect.length ? "⚠️ numbers not in the input: " + suspect.join(", ") : error ? "⚠️ AI failed, template text used: " + error.replace(/\|/g, "/").slice(0, 160) : "—"
     } |`,
   );
 }
