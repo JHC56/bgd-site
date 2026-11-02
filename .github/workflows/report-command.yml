@@ -1,0 +1,154 @@
+# /report command: a maintainer comments "/report" on a measurement PR,
+# and the bot writes the reports and adds them to that same PR.
+# Merging the PR then publishes the data and the reports together.
+#
+# Safety:
+#   - Only the owner, org members and collaborators can trigger it (author_association).
+#   - The PR's code is never run. Scripts come from main; only the PR's CSV files are copied in.
+#   - The PR may only change files named data/clean/YYYY-MM-DD_SITE_HHMM.csv.
+#   - PRs from forks cannot be pushed to, so the bot opens a copy of the PR with the reports added.
+name: Report command
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  models: read
+
+jobs:
+  report:
+    if: >-
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, '/report') &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
+    runs-on: ubuntu-latest
+    concurrency:
+      group: report-pr-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      PR: ${{ github.event.issue.number }}
+      COMMENT_ID: ${{ github.event.comment.id }}
+    steps:
+      - name: Acknowledge the command
+        run: gh api -X POST "repos/$REPO/issues/comments/$COMMENT_ID/reactions" -f content=eyes > /dev/null
+
+      - name: Read the PR
+        id: pr
+        run: |
+          gh api "repos/$REPO/pulls/$PR" > /tmp/pr.json
+          {
+            echo "state=$(jq -r .state /tmp/pr.json)"
+            echo "head_ref=$(jq -r .head.ref /tmp/pr.json)"
+            echo "head_repo=$(jq -r .head.repo.full_name /tmp/pr.json)"
+            echo "base_ref=$(jq -r .base.ref /tmp/pr.json)"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Stop if the PR is closed
+        if: steps.pr.outputs.state != 'open'
+        run: |
+          gh pr comment "$PR" --repo "$REPO" --body "This PR is closed, so no report was made."
+          exit 1
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr.outputs.base_ref }}
+          path: base
+          fetch-depth: 0
+
+      - name: Copy in the PR's CSV files only
+        working-directory: base
+        env:
+          BASE_REF: ${{ steps.pr.outputs.base_ref }}
+        run: |
+          git fetch -q origin "pull/$PR/head:pr-head"
+          files=$(git diff --name-only "origin/$BASE_REF...pr-head")
+          good='^data/clean/[0-9]{4}-[0-9]{2}-[0-9]{2}_[A-Za-z0-9]+_[0-9]{4}\.csv$'
+          bad=$(printf '%s\n' "$files" | grep -v -E "$good" | grep -v '^$' || true)
+          if [ -n "$bad" ]; then
+            msg="The PR may only add CSV files named data/clean/YYYY-MM-DD_SITE_HHMM.csv. Remove these files and comment /report again:"
+            gh pr comment "$PR" --repo "$REPO" --body "$(printf '%s\n\n```\n%s\n```' "$msg" "$bad")"
+            exit 1
+          fi
+          csvs=$(printf '%s\n' "$files" | grep -E "$good" || true)
+          if [ -z "$csvs" ]; then
+            gh pr comment "$PR" --repo "$REPO" --body "No CSV files found in this PR."
+            exit 1
+          fi
+          printf '%s\n' "$csvs" > /tmp/csvs.txt
+          while read -r f; do git show "pr-head:$f" > "$f"; done < /tmp/csvs.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Check the CSV files
+        working-directory: base
+        run: |
+          if ! node scripts/validate.ts $(cat /tmp/csvs.txt) > /tmp/validate.txt 2>&1; then
+            cat /tmp/validate.txt
+            gh pr comment "$PR" --repo "$REPO" --body "$(printf 'The CSV check failed. Fix the file and comment /report again.\n\n```\n%s\n```' "$(cat /tmp/validate.txt)")"
+            exit 1
+          fi
+          cat /tmp/validate.txt
+
+      - name: Write the reports
+        working-directory: base
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_MODEL: ${{ vars.GITHUB_MODEL }}
+          AI_PROVIDER: ${{ vars.AI_PROVIDER }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+        run: |
+          node scripts/report.ts
+          git status --porcelain --untracked-files=all reports/ | awk '{print $2}' > /tmp/reports.txt
+          echo "New reports:"; cat /tmp/reports.txt
+
+      # Same-repository PR: add the reports to the PR branch itself
+      - uses: actions/checkout@v4
+        if: steps.pr.outputs.head_repo == github.repository
+        with:
+          ref: ${{ steps.pr.outputs.head_ref }}
+          path: pr
+
+      - name: Add the reports to this PR
+        if: steps.pr.outputs.head_repo == github.repository
+        working-directory: pr
+        run: |
+          if [ ! -s /tmp/reports.txt ]; then
+            gh pr comment "$PR" --repo "$REPO" --body "Reports for these CSV files already exist. Nothing to add."
+            exit 0
+          fi
+          mkdir -p reports
+          while read -r f; do cp "../base/$f" "$f"; done < /tmp/reports.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          git commit -q -m "Add reports (requested in #$PR)"
+          git push -q
+          { cat ../base/.report-pr.md; echo; echo "Reports were added to this PR. Merge it to publish the data and the reports together."; } > /tmp/body.md
+          gh pr comment "$PR" --repo "$REPO" --body-file /tmp/body.md
+
+      # PR from a fork: the bot cannot push there, so it opens a copy with the reports added
+      - name: Open a copy of this PR with the reports
+        if: steps.pr.outputs.head_repo != github.repository
+        working-directory: base
+        run: |
+          branch="bot/pr-$PR"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -B "$branch"
+          git add $(cat /tmp/csvs.txt) reports/
+          git commit -q -m "Data from #$PR with reports"
+          git push -q -f origin "$branch"
+          { cat .report-pr.md; echo; echo "Data from #$PR, with reports added. Merge this PR to publish both."; } > /tmp/body.md
+          url=$(gh pr create --repo "$REPO" --head "$branch" --base "${{ steps.pr.outputs.base_ref }}" \
+                --title "Data from #$PR with reports" --body-file /tmp/body.md 2>/dev/null \
+                || gh pr view "$branch" --repo "$REPO" --json url --jq .url)
+          gh pr comment "$PR" --repo "$REPO" --body "This PR comes from a fork, so the reports were added to a copy: $url. Merge that one and close this PR."

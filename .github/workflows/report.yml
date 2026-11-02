@@ -1,5 +1,6 @@
-# Report generation: when CSVs are merged into main, judge them and open a "report PR".
-# A maintainer reviews that PR; merging it (= approval) lets deploy.yml publish the reports.
+# Rebuild reports by hand (Actions -> Generate reports -> Run workflow), e.g. after changing the criteria.
+# It opens a "report PR"; merging it publishes the new reports.
+# For new measurements, use the /report comment on the measurement PR instead (report-command.yml).
 #
 # The prose is written by GitHub Models (GitHub's built-in AI), so no API key is needed.
 # One-time setup:
@@ -10,10 +11,6 @@
 name: Generate reports
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "data/clean/**"
   workflow_dispatch:
     inputs:
       all:

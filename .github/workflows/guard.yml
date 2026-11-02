@@ -26,6 +26,8 @@ jobs:
         run: |
           # PRs from the owner, org members and collaborators (the maintainers) pass
           case "$ASSOC" in OWNER|MEMBER|COLLABORATOR) echo "$AUTHOR ($ASSOC): passed"; exit 0;; esac
+          # the report bot only ever changes reports/, and a maintainer still reviews its PR
+          if [ "$AUTHOR" = "github-actions[bot]" ]; then echo "report bot: passed"; exit 0; fi
           blocked=$(git diff --name-only "$BASE" "$HEAD" | grep -E '^(reports/|scripts/|\.github/|config/criteria\.json)' || true)
           if [ -n "$blocked" ]; then
             echo "::error::Only maintainers can change reports, criteria, scripts or workflows. Remove these files from the PR:"
