@@ -26,8 +26,8 @@
   <section class="card">
     <div class="card__hd"><h2 class="card__title">데이터 올리는 법</h2></div>
     <ol class="steps">
-      <li><span>측정 후 노트북에서 원본을 정제 CSV로 변환합니다.<br><code>node scripts/clean-logger.ts water_data/2026-11-06/20261106_103000_P1.csv --site P1</code></span></li>
-      <li><span>만들어진 파일(예: <code>2026-11-06_P1_1030.csv</code>)을 GitHub 저장소의 <code>data/clean/</code> 폴더에 올리고 <b>Pull Request</b>를 만듭니다.</span></li>
+      <li><span>측정한 CSV 파일을 GitHub 저장소의 <code>data/inbox/</code> 폴더에 올리고 <b>Pull Request</b>를 만듭니다. 원본 그대로 올려도 되고, 여러 파일이나 여러 지점이 섞인 파일도 괜찮아요.</span></li>
+      <li><span>지점은 파일 안의 <code>site</code>(지점) 열, 폴더 이름(<code>data/inbox/P3/</code>), 파일 이름(<code>…_P3.csv</code>) 중 하나로 알려 주세요.</span></li>
       <li><span>자동 검사와 관리자 확인을 통과하면 사이트에 반영됩니다.</span></li>
     </ol>
     <h3 style="font-size:14px;margin:18px 0 8px">정제 CSV 형식</h3>

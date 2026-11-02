@@ -2,22 +2,35 @@
 
 ## Publishing measurements
 
-1. Someone opens a PR that adds CSVs to `data/clean/` (one file per site per session).
-2. Approve the PR checks (`pr-check`).
-3. Comment `/report` on the PR. The bot checks the CSVs, writes the reports, and adds them to the same PR.
+1. Someone opens a PR that adds files to `data/inbox/` (any CSV: raw logger output, Excel exports,
+   one file for a whole patrol, or one file per site). Clean files can also go straight to `data/clean/`.
+2. Approve the PR checks (`pr-check`). `Check CSV` test-cleans the inbox files and shows what would come out.
+3. Comment `/report` on the PR. The bot cleans the inbox files into `data/clean/`, checks them, writes the
+   reports, moves the originals to `data/raw/`, and adds all of it to the same PR.
 4. Read the bot's comment, then merge. The data and reports go live together.
 
-For PRs from forks the bot cannot push, so it opens a copy of the PR with the reports added; merge that one.
+How the bot reads inbox files:
+
+- Site: a `site` column (P3, 3, 3번, or the site name), else the folder (`data/inbox/P3/`), the file name
+  (`..._P3.csv`), or the `.json` file water_logger.py writes next to the CSV.
+- Sessions: a new session starts after a 20-minute gap; each becomes one clean file.
+- Cleaning: board flags, DS18B20 fault values (-127, 85), zero conductivity and impossible values are dropped;
+  rows are sorted, duplicate times removed, and readings averaged per minute.
+- Reading: UTF-8 or CP949, comma / semicolon / tab, decimal commas, Korean or English column names with units,
+  ISO / `YYYY/MM/DD` / `오후 3:20` / Excel serial times, separate date and time columns, repeated headers.
+
+For PRs from forks the bot cannot push, so it opens a copy of the PR with the results; merge that one.
 To rebuild every report (for example after changing the criteria), run Actions → Generate reports with "Rebuild every report".
 
 ## Usage
 
 Requires Node 22.18 or later (runs the TypeScript files directly; no install step).
 
-**Convert a raw log** from `water_logger.py` into a clean CSV (1-minute averages, board-flagged values dropped):
+**Clean inbox files locally** (same as the bot does):
 
 ```bash
-node scripts/clean-logger.ts water_data/2026-11-06/20261106_103000_P1.csv --site P1
+node scripts/ingest.ts --check    # show what would happen
+node scripts/ingest.ts            # write data/clean/ and move originals to data/raw/
 ```
 
 **Check it** before opening a pull request:
