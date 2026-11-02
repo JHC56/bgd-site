@@ -1,5 +1,5 @@
-# Protected-path check: blocks PRs from non-maintainers that change reports, criteria, scripts or workflows.
-# Regular contributors may only add CSVs under data/clean.
+# Protected-path check: blocks PRs from non-maintainers that change reports, archived raw data,
+# criteria, scripts or workflows. Regular contributors add files under data/inbox/ or data/clean/.
 # Waits until a maintainer approves it (Required reviewers on the "pr-check" environment).
 name: Check protected paths
 
@@ -28,9 +28,9 @@ jobs:
           case "$ASSOC" in OWNER|MEMBER|COLLABORATOR) echo "$AUTHOR ($ASSOC): passed"; exit 0;; esac
           # the report bot only ever changes reports/, and a maintainer still reviews its PR
           if [ "$AUTHOR" = "github-actions[bot]" ]; then echo "report bot: passed"; exit 0; fi
-          blocked=$(git diff --name-only "$BASE" "$HEAD" | grep -E '^(reports/|scripts/|\.github/|config/criteria\.json)' || true)
+          blocked=$(git diff --name-only "$BASE" "$HEAD" | grep -E '^(reports/|data/raw/|scripts/|\.github/|config/criteria\.json)' || true)
           if [ -n "$blocked" ]; then
-            echo "::error::Only maintainers can change reports, criteria, scripts or workflows. Remove these files from the PR:"
+            echo "::error::Only maintainers can change reports, data/raw, criteria, scripts or workflows. Remove these files from the PR:"
             echo "$blocked"
             exit 1
           fi

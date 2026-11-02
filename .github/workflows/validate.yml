@@ -1,11 +1,13 @@
-# CSV check: runs when a PR adds or changes CSVs in data/clean and checks format and value ranges.
-# A failure shows ✗ on the PR; fix it before merging.
+# Data check: runs when a PR adds files to data/inbox/ or data/clean/.
+# Inbox files are test-cleaned (nothing is written) and clean files are checked, so problems
+# show up on the PR before a maintainer comments /report.
 # Waits until a maintainer approves it (Required reviewers on the "pr-check" environment).
 name: Check CSV
 
 on:
   pull_request:
     paths:
+      - "data/inbox/**"
       - "data/clean/**"
 
 permissions:
@@ -20,5 +22,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Validate clean CSVs
+      - name: Test-clean inbox files
+        run: |
+          node scripts/ingest.ts --check
+          cat .ingest-summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Check clean files
         run: node scripts/validate.ts data/clean

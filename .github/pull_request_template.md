@@ -4,13 +4,11 @@ Date: YYYY-MM-DD
 
 Time: HH:MM – HH:MM
 
-Samples: number of rows in the CSV
-
 Weather: e.g. sunny, 14 °C
 
 Notes: e.g. algae visible, rain yesterday
 
-## Site
+## Sites in this upload
 
 - [ ] P1 Main gate channel
 - [ ] P2 In front of Hi-Tech Center
@@ -20,7 +18,6 @@ Notes: e.g. algae visible, rain yesterday
 
 ## Checklist
 
-- [ ] The CSV is in `data/clean/`
-- [ ] The file name is `YYYY-MM-DD_SITE_HHMM.csv` (date_site_start-time)
-- [ ] One site per file
-- [ ] Only CSV files are changed in this PR
+- [ ] Files are in `data/inbox/` (any CSV, the bot cleans them)
+- [ ] Each file has a site column, or the site is in the folder or file name (`data/inbox/P3/...` or `..._P3.csv`)
+- [ ] Only data files are changed in this PR
