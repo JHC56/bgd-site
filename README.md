@@ -8,10 +8,6 @@
   <a href="https://github.com/JHC56/bgd-site/issues/new?template=water-report.yml"><img src="https://img.shields.io/badge/pond-report%20a%20problem-E0A526.svg" alt="Report a problem"></a>
 </p>
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/3a4180c0-1020-4426-9256-c4c26a55aa87" width="90%" alt="BbiGeuDeok">
-</p>
-
 <p align="justify">
 The middle of the pond is hard to reach, so its water was rarely checked. A duck robot now visits five spots and measures the water. This <a href="https://jhc56.github.io/bgd-site/">site</a> shows the results. The duck smiles when the water is fine and looks worried when it is not.
 </p>
