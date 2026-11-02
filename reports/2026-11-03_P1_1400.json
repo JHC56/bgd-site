@@ -1,0 +1,87 @@
+{
+  "id": "2026-11-03_P1_1400",
+  "site": "P1",
+  "site_name": "1번 정문 수로",
+  "date": "2026-11-03",
+  "start": "2026-11-03T14:00:00",
+  "end": "2026-11-03T14:07:00",
+  "rows": 8,
+  "metrics": [
+    {
+      "key": "temp_c",
+      "label": "수온",
+      "unit": "°C",
+      "limit_min": null,
+      "limit_max": null,
+      "n": 8,
+      "mean": 13.13,
+      "min": 13.01,
+      "max": 13.33,
+      "last": 13.03,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "info"
+    },
+    {
+      "key": "turb_ntu",
+      "label": "탁도",
+      "unit": "NTU",
+      "limit_min": null,
+      "limit_max": 15,
+      "n": 8,
+      "mean": 7.8,
+      "min": 6.9,
+      "max": 9,
+      "last": 8,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "good"
+    },
+    {
+      "key": "ec_uS_cm",
+      "label": "전도도",
+      "unit": "µS/cm",
+      "limit_min": null,
+      "limit_max": null,
+      "n": 8,
+      "mean": 429.63,
+      "min": 421,
+      "max": 437,
+      "last": 432,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "info"
+    },
+    {
+      "key": "ph",
+      "label": "pH",
+      "unit": "",
+      "limit_min": 6.5,
+      "limit_max": 8.5,
+      "n": 0,
+      "mean": null,
+      "min": null,
+      "max": null,
+      "last": null,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "none"
+    }
+  ],
+  "overall": "good",
+  "summary": "판정 항목 모두 기준 이내",
+  "body_md": "### 종합 판정\n2026-11-03 1번 정문 수로 지점에서 8회 측정한 결과, 종합 판정은 **적합**임.\n\n### 항목별 결과\n- 수온: 평균 13.1°C (기준 없음, 참고값)\n- 탁도: 적합 — 평균 7.8 NTU, 범위 6.9~9.0 NTU, 기준 이탈 0%\n- 전도도: 평균 430 µS/cm (기준 없음, 참고값)\n- pH: 측정값 없음 (센서 연결 전)\n\n### 권고 사항\n- 정기 측정 유지",
+  "writer": "template",
+  "ai_check": {
+    "ok": true
+  },
+  "generated_at": "2026-11-02T15:24:28.485Z",
+  "criteria_source": {
+    "ph": "Hardware improvement plan",
+    "turb_ntu": "Hardware improvement plan",
+    "temp_c": "Reference only",
+    "ec_uS_cm": "Reference only",
+    "tds_ppm": "Reference only",
+    "level_mm": "Reference only"
+  }
+}
