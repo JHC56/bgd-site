@@ -1,0 +1,85 @@
+# Report generation: when CSVs are merged into main, judge them and open a "report PR".
+# A maintainer reviews that PR; merging it (= approval) lets deploy.yml publish the reports.
+#
+# The prose is written by GitHub Models (GitHub's built-in AI), so no API key is needed.
+# One-time setup:
+#   Settings -> Actions -> General -> Workflow permissions:
+#   "Read and write permissions" + "Allow GitHub Actions to create and approve pull requests"
+# Optional: Settings -> Secrets and variables -> Actions -> Variables: GITHUB_MODEL (default openai/gpt-4.1-mini)
+# Optional: to use Gemini instead, add the secret GEMINI_API_KEY and the variable AI_PROVIDER=gemini
+name: Generate reports
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/clean/**"
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Rebuild every report (use after changing the criteria)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  models: read        # access to GitHub Models
+
+concurrency:
+  group: report
+  cancel-in-progress: false
+
+jobs:
+  # Only run when the person who merged or started this is a maintainer
+  # (the repo owner or an invited collaborator). Narrow it with the variable
+  # MAINTAINER_ROLES, e.g. "admin" for the owner only.
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      ok: ${{ steps.role.outputs.ok }}
+    steps:
+      - id: role
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ROLES: ${{ vars.MAINTAINER_ROLES || 'admin,maintain,write' }}
+        run: |
+          role=$(gh api "repos/${{ github.repository }}/collaborators/${{ github.actor }}/permission" --jq .role_name 2>/dev/null) || role=none
+          echo "${{ github.actor }} role: $role"
+          if echo ",$ROLES," | grep -q ",$role,"; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipped: ${{ github.actor }} is not a maintainer"
+          fi
+
+  report:
+    needs: check
+    if: needs.check.outputs.ok == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Build reports
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_MODEL: ${{ vars.GITHUB_MODEL }}
+          AI_PROVIDER: ${{ vars.AI_PROVIDER }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+        run: node scripts/report.ts ${{ inputs.all && '--all' || '' }}
+      - name: Open the report PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: bot/reports
+          title: "Automated water-quality reports"
+          body-path: .report-pr.md
+          commit-message: "Add automated reports"
+          add-paths: reports/*.json
+          labels: report
+          delete-branch: true
+          assignees: ${{ github.actor }}

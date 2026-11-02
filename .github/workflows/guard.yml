@@ -1,0 +1,35 @@
+# Protected-path check: blocks PRs from non-maintainers that change reports, criteria, scripts or workflows.
+# Regular contributors may only add CSVs under data/clean.
+# Waits until a maintainer approves it (Required reviewers on the "pr-check" environment).
+name: Check protected paths
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    environment: pr-check   # waits for maintainer approval
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check maintainer-only files
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          ASSOC: ${{ github.event.pull_request.author_association }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # PRs from the owner, org members and collaborators (the maintainers) pass
+          case "$ASSOC" in OWNER|MEMBER|COLLABORATOR) echo "$AUTHOR ($ASSOC): passed"; exit 0;; esac
+          blocked=$(git diff --name-only "$BASE" "$HEAD" | grep -E '^(reports/|scripts/|\.github/|config/criteria\.json)' || true)
+          if [ -n "$blocked" ]; then
+            echo "::error::Only maintainers can change reports, criteria, scripts or workflows. Remove these files from the PR:"
+            echo "$blocked"
+            exit 1
+          fi
+          echo "No protected paths changed: passed"

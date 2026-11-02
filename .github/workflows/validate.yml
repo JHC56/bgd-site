@@ -1,0 +1,24 @@
+# CSV check: runs when a PR adds or changes CSVs in data/clean and checks format and value ranges.
+# A failure shows ✗ on the PR; fix it before merging.
+# Waits until a maintainer approves it (Required reviewers on the "pr-check" environment).
+name: Check CSV
+
+on:
+  pull_request:
+    paths:
+      - "data/clean/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    environment: pr-check   # waits for maintainer approval
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Validate clean CSVs
+        run: node scripts/validate.ts data/clean
