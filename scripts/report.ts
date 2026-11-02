@@ -61,34 +61,68 @@ function facts(j: Judgement) {
   };
 }
 
+// GitHub Models has had more than one endpoint and API version.
+// Try them in order and keep the first real answer; collect every error for the PR comment.
+const GH_ATTEMPTS: { url: string; model: string; headers: Record<string, string> }[] = [
+  {
+    url: "https://models.github.ai/inference/chat/completions",
+    model: GH_MODEL,
+    headers: { Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2026-03-10" },
+  },
+  {
+    url: "https://models.github.ai/inference/chat/completions",
+    model: GH_MODEL,
+    headers: { Accept: "application/json" },
+  },
+  {
+    // Older Azure-hosted endpoint: same GITHUB_TOKEN, model name without the publisher prefix
+    url: "https://models.inference.ai.azure.com/chat/completions",
+    model: GH_MODEL.replace(/^[^/]+\//, ""),
+    headers: { Accept: "application/json" },
+  },
+];
+
 async function askGitHub(j: Judgement): Promise<string> {
-  const res = await fetch("https://models.github.ai/inference/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/vnd.github+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-      Authorization: `Bearer ${KEY}`,
-    },
-    body: JSON.stringify({
-      model: GH_MODEL,
-      messages: [
-        { role: "system", content: SYSTEM },
-        { role: "user", content: "Measurement results:\n" + JSON.stringify(facts(j), null, 2) },
-      ],
-    }),
-  });
-  const raw = await res.text();
-  if (!res.ok) throw new Error(`GitHub Models ${res.status}: ${raw.slice(0, 300)}`);
-  let data: any;
-  try {
-    data = JSON.parse(raw);
-  } catch {
-    throw new Error(`GitHub Models returned non-JSON (status ${res.status}): ${JSON.stringify(raw.slice(0, 200))}`);
+  const errors: string[] = [];
+  for (const a of GH_ATTEMPTS) {
+    try {
+      const res = await fetch(a.url, {
+        method: "POST",
+        redirect: "manual", // a redirect would turn the POST into a GET and hide the real error
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${KEY}`, ...a.headers },
+        body: JSON.stringify({
+          model: a.model,
+          messages: [
+            { role: "system", content: SYSTEM },
+            { role: "user", content: "Measurement results:\n" + JSON.stringify(facts(j), null, 2) },
+          ],
+        }),
+      });
+      const raw = await res.text();
+      const where = `${new URL(a.url).host} ${res.status}`;
+      if (res.status >= 300 && res.status < 400) {
+        errors.push(`${where} redirect to ${res.headers.get("location") ?? "?"}`);
+        continue;
+      }
+      if (!res.ok) {
+        errors.push(`${where}: ${raw.slice(0, 150)}`);
+        continue;
+      }
+      let data: any;
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        errors.push(`${where} non-JSON (${res.headers.get("content-type") ?? "?"}): ${JSON.stringify(raw.slice(0, 60))}`);
+        continue;
+      }
+      const text = (data.choices?.[0]?.message?.content ?? "").trim();
+      if (text) return text;
+      errors.push(`${where}: empty answer`);
+    } catch (e) {
+      errors.push(`${new URL(a.url).host}: ${(e as Error).message}`);
+    }
   }
-  const text = (data.choices?.[0]?.message?.content ?? "").trim();
-  if (!text) throw new Error("GitHub Models returned an empty response");
-  return text;
+  throw new Error(errors.join(" | "));
 }
 
 async function askGemini(j: Judgement): Promise<string> {
