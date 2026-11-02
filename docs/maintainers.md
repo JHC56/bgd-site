@@ -1,5 +1,15 @@
 # Maintainer notes
 
+## Publishing measurements
+
+1. Someone opens a PR that adds CSVs to `data/clean/` (one file per site per session).
+2. Approve the PR checks (`pr-check`).
+3. Comment `/report` on the PR. The bot checks the CSVs, writes the reports, and adds them to the same PR.
+4. Read the bot's comment, then merge. The data and reports go live together.
+
+For PRs from forks the bot cannot push, so it opens a copy of the PR with the reports added; merge that one.
+To rebuild every report (for example after changing the criteria), run Actions → Generate reports with "Rebuild every report".
+
 ## Usage
 
 Requires Node 22.18 or later (runs the TypeScript files directly; no install step).
