@@ -1,0 +1,16 @@
+{
+  "name": "bgd-site",
+  "private": true,
+  "type": "module",
+  "description": "BbiGeuDeok (Be Green Duck) water-quality site for Ingyeongho pond: CSV checks, judgement, AI reports and a static site build",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "validate": "node scripts/validate.ts data/clean",
+    "report": "node scripts/report.ts",
+    "build": "node scripts/build.ts",
+    "clean-logger": "node scripts/clean-logger.ts",
+    "serve": "node scripts/serve.ts"
+  }
+}

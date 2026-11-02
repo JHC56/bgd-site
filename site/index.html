@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EDF2F1">
+<meta name="description" content="삐그덕(Be Green Duck) — 인하대 인경호 자율 순찰 수질 모니터링">
+<title>삐그덕 · 인경호 실시간 수질</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="home">
+<div class="page">
+  <div id="banner"></div>
+
+  <section class="dash">
+    <!-- Video -->
+    <article class="card video" aria-label="실시간 영상">
+      <div class="video__frame" id="frame">
+        <img id="cam" alt="삐그덕 카메라 실시간 영상 (객체 인식 박스 포함)" hidden>
+        <div class="offline" id="offline">
+          <span class="offline__duck" id="offDuck"></span>
+          <b>오리 3호는 지금 쉬는 중이에요</b>
+          <span>순찰을 나가면 오리가 보는 화면이 여기에 나와요.<br>아래 숫자는 가장 최근에 잰 값입니다.</span>
+        </div>
+        <div class="video__badge"><span class="pill pill--live" id="livePill" hidden>LIVE</span></div>
+        <div class="video__stats mono" id="vstats" hidden></div>
+      </div>
+      <div class="video__foot">
+        <span>오리 눈높이 카메라</span>
+        <span id="objs"></span>
+      </div>
+    </article>
+
+    <!-- Today's report -->
+    <article class="card report" aria-label="AI 보고서">
+      <div class="card__hd">
+        <h2 class="card__title">오늘의 인경호</h2>
+        <span class="card__meta" id="rmeta"></span>
+      </div>
+      <div class="report__sites" id="sites" role="group" aria-label="지점 선택"></div>
+      <div class="report__head" id="rhead"></div>
+      <div class="report__body md" id="rbody"><p class="empty">불러오는 중…</p></div>
+      <div class="report__foot" id="rfoot"></div>
+    </article>
+  </section>
+
+  <!-- Sensor values -->
+  <section class="sensors" id="sensors" aria-label="센서 값" aria-live="polite"></section>
+</div>
+
+<script type="module">
+  import { duckSVG } from "./assets/duck.js";
+  document.getElementById("offDuck").innerHTML = duckSVG("hmm", 150);
+</script>
+<script type="module" src="assets/home.js"></script>
+</body>
+</html>

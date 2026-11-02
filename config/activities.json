@@ -1,0 +1,66 @@
+{
+  "_note": "Action log and participation content (Korean, shown on the site). Items with demo=true are labelled as demo examples; remove demo or set it to false once real records exist.",
+  "actions": [
+    {
+      "demo": true,
+      "period": "2026.08.24 — 08.27",
+      "title": "4번 중앙부 국소 살포",
+      "site": "P4",
+      "desc": "상태가 나쁜 구역에만 녹조 억제제를 뿌렸어요. 3일 뒤 다시 측정했습니다.",
+      "metric": "탁도",
+      "unit": "NTU",
+      "before": 11.6,
+      "after": 8.4
+    },
+    {
+      "demo": true,
+      "period": "예정",
+      "title": "물레방아 순환 장치 설치",
+      "site": "P4",
+      "desc": "물이 가장 안 도는 중앙부에 설치해 국소적으로 물을 돌립니다. 설치 전후 탁도·전도도를 같은 자리에서 비교할 예정이에요."
+    },
+    {
+      "demo": true,
+      "period": "2026.09.06 예정",
+      "title": "EM 흙공 던지기 · 학생 참여",
+      "desc": "참여하고 며칠 뒤 수치가 어떻게 변했는지 사이트에서 볼 수 있어요. 결과가 눈에 보이는 봉사입니다."
+    }
+  ],
+  "event": {
+    "demo": true,
+    "title": "EM 흙공 던지기",
+    "sub": "인경호 정화 활동",
+    "when": "9월~10월 · 5회차",
+    "next": "9/12 (금) 16:00",
+    "where": "인경호 일대",
+    "size": "회차당 30~40명",
+    "credit": "봉사 2시간",
+    "note": "일회성 봉사와 다른 점은 이거예요. 내가 던진 흙공이 진짜로 수치를 바꿨는지 3일 뒤에 확인할 수 있습니다."
+  },
+  "departments": {
+    "demo": true,
+    "year": "2026년 누적",
+    "rows": [
+      {
+        "name": "환경공학과",
+        "v": 132
+      },
+      {
+        "name": "전기전자공학과",
+        "v": 118
+      },
+      {
+        "name": "컴퓨터공학과",
+        "v": 97
+      },
+      {
+        "name": "해양과학과",
+        "v": 76
+      },
+      {
+        "name": "기계공학과",
+        "v": 54
+      }
+    ]
+  }
+}

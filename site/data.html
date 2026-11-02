@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EDF2F1">
+<title>삐그덕 · 측정 데이터</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="page">
+  <div id="banner"></div>
+  <section class="card">
+    <div class="card__hd"><h2 class="card__title">측정 데이터</h2><span class="card__meta" id="count"></span></div>
+    <div style="overflow-x:auto">
+      <table class="dtable">
+        <thead><tr><th>파일</th><th>지점</th><th>측정 시간</th><th>줄</th><th>판정</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card__hd"><h2 class="card__title">데이터 올리는 법</h2></div>
+    <ol class="steps">
+      <li><span>측정 후 노트북에서 원본을 정제 CSV로 변환합니다.<br><code>node scripts/clean-logger.ts water_data/2026-11-06/20261106_103000_P1.csv --site P1</code></span></li>
+      <li><span>만들어진 파일(예: <code>2026-11-06_P1_1030.csv</code>)을 GitHub 저장소의 <code>data/clean/</code> 폴더에 올리고 <b>Pull Request</b>를 만듭니다.</span></li>
+      <li><span>자동 검사(✓)가 통과하면 메인테이너가 머지합니다.</span></li>
+      <li><span>봇이 판정과 AI 보고서를 만들어 <b>보고서 PR</b>을 엽니다. 메인테이너가 확인하고 머지하면 이 사이트에 반영됩니다.</span></li>
+    </ol>
+    <h3 style="font-size:14px;margin:18px 0 8px">정제 CSV 형식</h3>
+    <table class="dtable">
+      <thead><tr><th>열</th><th>필수</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td><code>time</code></td><td>필수</td><td>측정 시각 <code>2026-11-06T10:30:00</code>, 시간순</td></tr>
+        <tr><td><code>site</code></td><td>필수</td><td>지점 이름(영문·숫자), 파일 이름의 지점과 같아야 함</td></tr>
+        <tr><td><code>temp_c</code> · <code>turb_ntu</code> · <code>ec_uS_cm</code></td><td>필수</td><td>수온 °C · 탁도 NTU · 전도도 µS/cm</td></tr>
+        <tr><td><code>tds_ppm</code> · <code>level_mm</code> · <code>ph</code></td><td>선택</td><td>비워도 됨 (pH는 보정 전까지 빈칸)</td></tr>
+        <tr><td><code>lat</code> · <code>lon</code></td><td>선택</td><td>GPS 위치</td></tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+<script type="module">
+  import { chrome, demoBanner, getJSON, stChip, when, esc } from "./assets/common.js";
+  await chrome("data.html");
+  const data = await getJSON("data/reports.json");
+  document.getElementById("banner").innerHTML = demoBanner(data);
+  const list = data.reports.filter((r) => r.has_csv);
+  document.getElementById("count").textContent = `${list.length}개 파일`;
+  document.getElementById("rows").innerHTML = list.length
+    ? list.map((r) => `<tr>
+        <td>${esc(r.id)}.csv</td><td><b>${esc(r.site_name || r.site)}</b></td>
+        <td class="mono">${when(r.start)} ~ ${when(r.end).slice(6)}</td><td class="mono">${r.rows}</td>
+        <td>${stChip(r.overall)}</td>
+        <td><a href="data/csv/${encodeURIComponent(r.id)}.csv" download>다운로드</a>&nbsp;&nbsp;<a href="reports.html?id=${encodeURIComponent(r.id)}">보고서</a></td>
+      </tr>`).join("")
+    : `<tr><td colspan="6" class="empty">아직 올라온 데이터가 없습니다</td></tr>`;
+</script>
+</body>
+</html>

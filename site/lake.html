@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EDF2F1">
+<title>삐그덕 · 인경호 지도</title>
+<meta name="description" content="인경호 5개 측정 지점과 지점별 최근 판정">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="page">
+  <div id="banner"></div>
+  <section class="sect">
+    <h1 class="section-title">오리 3호가 도는 길</h1>
+    <p class="section-lead">5개 지점을 순서대로 돌며 물을 잽니다. 점 색은 지점마다 가장 최근에 잰 판정이에요. 점이나 목록을 누르면 자세히 보여요.</p>
+    <div class="lakewrap" style="margin-top:16px">
+      <div id="map"></div>
+      <div><ul class="sites" id="sitelist"></ul><div id="sitedetail"></div></div>
+    </div>
+  </section>
+
+  <section class="sect">
+    <h2 class="section-title">지점별 판정 이력</h2>
+    <p class="section-lead">같은 자리에서 잰 값을 날짜별로 모았어요. 어디가 계속 안 좋은지 한눈에 보입니다. 칸을 누르면 그날 보고서로 가요.</p>
+    <div style="overflow-x:auto;margin-top:12px" id="heat"></div>
+  </section>
+
+  <section class="sect">
+    <h2 class="section-title">오리 기분표</h2>
+    <p class="section-lead">물 상태에 따라 오리 표정이 바뀌어요. 지금은 판정 3단계(적합·주의·부적합)에 맞춰 테두리 친 세 표정을 씁니다.
+      7단계 전체는 환경부 호소 생활환경기준 항목(COD·총인 등)을 잴 수 있게 되면 적용할 예정이에요.</p>
+    <div class="moods" id="moods" style="margin-top:14px"></div>
+  </section>
+</div>
+<script type="module" src="assets/lake.js"></script>
+</body>
+</html>

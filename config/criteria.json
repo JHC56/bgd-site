@@ -1,0 +1,57 @@
+{
+  "_note": "Judgement criteria. Changes apply to the next reports. Metrics with enabled=false are shown as reference values only. Labels and units are Korean because they appear on the site.",
+  "status_rule": {
+    "_note": "Status by share of out-of-limit samples: 0% = good, below warn_pct = warn, otherwise bad",
+    "warn_pct": 10
+  },
+  "metrics": {
+    "ph": {
+      "label": "pH",
+      "unit": "",
+      "min": 6.5,
+      "max": 8.5,
+      "enabled": true,
+      "source": "Hardware improvement plan"
+    },
+    "turb_ntu": {
+      "label": "탁도",
+      "unit": "NTU",
+      "min": null,
+      "max": 15,
+      "enabled": true,
+      "source": "Hardware improvement plan"
+    },
+    "temp_c": {
+      "label": "수온",
+      "unit": "°C",
+      "min": null,
+      "max": null,
+      "enabled": false,
+      "source": "Reference only"
+    },
+    "ec_uS_cm": {
+      "label": "전도도",
+      "unit": "µS/cm",
+      "min": null,
+      "max": null,
+      "enabled": false,
+      "source": "Reference only"
+    },
+    "tds_ppm": {
+      "label": "TDS",
+      "unit": "ppm",
+      "min": null,
+      "max": null,
+      "enabled": false,
+      "source": "Reference only"
+    },
+    "level_mm": {
+      "label": "수위",
+      "unit": "mm",
+      "min": null,
+      "max": null,
+      "enabled": false,
+      "source": "Reference only"
+    }
+  }
+}

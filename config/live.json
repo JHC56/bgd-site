@@ -1,0 +1,4 @@
+{
+  "_note": "URL of the laptop relay server. Leave empty to show the 'resting' screen. Example: wss://xxxx.trycloudflare.com/ws",
+  "url": ""
+}

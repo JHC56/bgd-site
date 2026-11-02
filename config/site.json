@@ -1,0 +1,10 @@
+{
+  "_note": "Site-wide text and links (Korean, shown on the site). Safe to edit on the web.",
+  "team": "팀 최정김",
+  "project": "삐그덕 (Be Green Duck)",
+  "school": "인하대학교",
+  "contest": "MOONG TechThon 2026",
+  "repo": "https://github.com/JHC56/bgd-site",
+  "join_form_url": "",
+  "_join_form_url": "Sign-up form URL for the EM mud-ball event (e.g. a Google Form). Leave empty to show 'sign-up coming soon'."
+}

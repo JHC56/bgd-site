@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EDF2F1">
+<title>삐그덕 · 소개</title>
+<meta name="description" content="삐그덕 오리 3호 기체 구조, 동작 방식, ESG, 확대 적용">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="page">
+  <section class="sect">
+    <div class="grid2" style="align-items:center">
+      <div id="bigduck" style="text-align:center"></div>
+      <div>
+        <h1 class="section-title" style="font-size:30px">Let's Be Green Duck</h1>
+        <p class="section-lead">사람이 배를 타고 나가야 잴 수 있던 인경호 한가운데를, 오리 모양 로봇이 GPS로 지점을 찾아가 잽니다.
+          지점에 멈추면 센서를 물에 내려 재고, 잰 값은 기준과 대조해 보고서로 정리됩니다. 학생들은 이 사이트에서 지금 물 상태를 봅니다.</p>
+      </div>
+    </div>
+    <div class="flow" style="margin-top:18px">
+      <div style="--c:#0E9DB2"><b>로봇이 잽니다</b><span>GPS로 5개 지점을 돌며<br>수온·탁도·전도도·수위</span></div>
+      <div style="--c:#A06BE8"><b>AI가 읽습니다</b><span>기준과 대조한 결과를<br>보고서 문장으로 정리</span></div>
+      <div style="--c:#FFA61F"><b>학생이 봅니다</b><span>지금 이 물의 상태를<br>사이트에서 바로</span></div>
+    </div>
+  </section>
+
+  <section class="sect">
+    <h2 class="section-title">오리 3호는 이렇게 생겼어요</h2>
+    <div class="grid2" style="margin-top:14px">
+      <div>
+        <div class="spec"><i>⇄</i><div><b>모터 2기 차동 조향</b><span>방향타 없이 좌우 출력 차이로 방향을 틀어요. 선체·추진부·전장은 직접 설계했습니다.</span></div></div>
+        <div class="spec"><i>⌖</i><div><b>주행 보드와 측정 보드 분리</b><span>주행은 ESP32(GPS 웨이포인트), 수질 측정은 Arduino UNO R4 WiFi가 맡아요.</span></div></div>
+        <div class="spec"><i>▣</i><div><b>야외용 방수 박스</b><span>전장은 방수 박스 안에 넣고, 선이 나가는 자리는 케이블 글랜드로 막았어요.</span></div></div>
+        <div class="spec"><i>⚡</i><div><b>전원 분리</b><span>12V(3S) 배터리 + 5V DC-DC. 모터 전원과 제어 전원을 따로 써서 센서 값이 흔들리지 않게 했어요.</span></div></div>
+      </div>
+      <div>
+        <div class="spec"><i>⇵</i><div><b>센서 승강 포드</b><span>센서를 한 포드에 묶어 서보(MG996R)와 크랭크로 세로 가이드 안에서 올리고 내려요. 멈춰서 잴 때만 물에 담급니다.</span></div></div>
+        <div class="spec"><i>≋</i><div><b>측정 항목</b><span>수온(DS18B20), 탁도(SEN0189), 전도도(SEN0244), 수위<br>pH는 연결 예정. 판정 기준은 탁도 15 NTU 이하, pH 6.5~8.5</span></div></div>
+        <div class="spec"><i>◉</i><div><b>오리시점 카메라 + YOLO</b><span>ESP32-CAM 영상을 노트북이 받아 YOLO로 물체를 알아봐요. 회피를 돕는 저가 레이더도 검토 중입니다.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect">
+    <h2 class="section-title">ESG 세 영역에 그대로 연결됩니다</h2>
+    <div class="grid3 esg" style="margin-top:14px">
+      <div style="--c:#1BA864;--w:#DBFBEA"><b>환경</b><p>녹조와 악취를 줄입니다. 어디가 나쁜지 알고 나면 약제를 필요한 구역에만 써서 사용량을 아낄 수 있어요.</p></div>
+      <div style="--c:#E0517F;--w:#FFE9F1"><b>사회</b><p>학생이 자기 학교 물 상태를 직접 확인합니다. 정화 활동의 효과가 수치로 보이니, 보는 사람에서 참여하는 사람이 됩니다.</p></div>
+      <div style="--c:#2F7FD8;--w:#E3F0FF"><b>지배구조</b><p>데이터에 기반한 판단 체계가 자리잡습니다. 조치 내역과 효과가 기록으로 쌓여, 예산을 쓸 때 시민에게 설명할 근거가 됩니다.</p></div>
+    </div>
+  </section>
+
+  <section class="sect">
+    <h2 class="section-title">인경호 다음은?</h2>
+    <p class="section-lead">경로만 다시 그리면 다른 물에도 그대로 쓸 수 있어요. 도시 생활권 곳곳에 흩어진 작은 고인 물이 대상입니다.</p>
+    <div class="grid4 places" id="places" style="margin-top:14px"></div>
+  </section>
+</div>
+<script type="module" src="assets/about.js"></script>
+</body>
+</html>
