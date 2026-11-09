@@ -1,0 +1,72 @@
+{
+  "id": "2026-11-09_P1_0539",
+  "site": "P1",
+  "site_name": "1번 정문 수로",
+  "date": "2026-11-09",
+  "start": "2026-11-09T05:39:00",
+  "end": "2026-11-09T05:43:00",
+  "rows": 5,
+  "metrics": [
+    {
+      "key": "temp_c",
+      "label": "수온",
+      "unit": "°C",
+      "limit_min": null,
+      "limit_max": null,
+      "n": 5,
+      "mean": 9.64,
+      "min": 9.33,
+      "max": 10.03,
+      "last": 9.33,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "info"
+    },
+    {
+      "key": "turb_ntu",
+      "label": "탁도",
+      "unit": "NTU",
+      "limit_min": null,
+      "limit_max": 15,
+      "n": 0,
+      "mean": null,
+      "min": null,
+      "max": null,
+      "last": null,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "none"
+    },
+    {
+      "key": "ph",
+      "label": "pH",
+      "unit": "",
+      "limit_min": 6.5,
+      "limit_max": 8.5,
+      "n": 5,
+      "mean": 7.01,
+      "min": 6.98,
+      "max": 7.05,
+      "last": 6.98,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "good"
+    }
+  ],
+  "overall": "good",
+  "summary": "판정 항목 모두 기준 이내",
+  "body_md": "### 종합 판정\n2026-11-09 1번 정문 수로 지점에서 5회 측정한 결과, 종합 판정은 **적합**임.\n\n### 항목별 결과\n- 수온: 평균 9.6°C (기준 없음, 참고값)\n- 탁도: 측정값 없음\n- pH: 적합 — 평균 7.01, 범위 6.98~7.05, 기준 이탈 0%\n\n### 권고 사항\n- 정기 측정 유지",
+  "writer": "template",
+  "ai_check": {
+    "ok": true
+  },
+  "generated_at": "2026-11-09T05:59:54.668Z",
+  "criteria_source": {
+    "ph": "Hardware improvement plan",
+    "turb_ntu": "Hardware improvement plan",
+    "temp_c": "Reference only",
+    "ec_uS_cm": "Reference only",
+    "tds_ppm": "Reference only",
+    "level_mm": "Reference only"
+  }
+}
