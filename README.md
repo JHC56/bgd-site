@@ -1,6 +1,7 @@
 # BbiGeuDeok: Be Green Duck
 >Check the water of Ingyeongho pond, measured by a duck robot.
 
+
 <p align="center">
   <a href="https://jhc56.github.io/bgd-site/"><img src="https://img.shields.io/badge/site-open-16503C.svg" alt="Site"></a>
   <a href="https://github.com/JHC56/bgd-site/actions/workflows/deploy.yml"><img src="https://github.com/JHC56/bgd-site/actions/workflows/deploy.yml/badge.svg" alt="Deploy"></a>
@@ -8,12 +9,16 @@
   <a href="https://github.com/JHC56/bgd-site/issues/new?template=water-report.yml"><img src="https://img.shields.io/badge/pond-report%20a%20problem-E0A526.svg" alt="Report a problem"></a>
 </p>
 
+<img width="1367" height="769" src="https://github.com/user-attachments/assets/efb95666-9c52-41e9-9403-4fd95d69ef9d" />
+
+
 <p align="justify">
 The middle of the pond is hard to reach, so its water was rarely checked. A duck robot now visits five spots and measures the water. This <a href="https://jhc56.github.io/bgd-site/">site</a> shows the results. The duck smiles when the water is fine and looks worried when it is not.
 </p>
 
 ## Updates
 
+- Nov 11, photo updated
 - Nov 3, 2026: First patrol data for all five spots is on the site.
 - Nov 2, 2026: Repository created.
 
@@ -38,6 +43,10 @@ flowchart LR
   D -.->|Live view| J
 ```
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/74c7328f-caa5-4e0f-983b-8f1374212887" width="100%" alt="Reports page">
+</p>
+
 ## Sensors
 
 <p align="justify">
@@ -52,6 +61,8 @@ Each spot is judged by pH (6.5 to 8.5) and turbidity (15 NTU or less). Temperatu
 | pH sensor | Measures how acidic or basic the water is. | Judged against 6.5 to 8.5 once it is connected. Not connected yet. |
 | Sensor lift pod | Lowers the sensors into the water at each spot and pulls them back up while the duck moves. | Keeps the probes clean and gives the same depth at every spot. |
 | ESP32-CAM + YOLO | Sends the duck's view over Wi-Fi. A laptop runs YOLO on the video to find floating trash. | Shown on the live page. Found objects are listed next to the video. |
+
+<img width="1024" height="576" alt="converted_16x9" src="https://github.com/user-attachments/assets/dff8cd57-3cf3-4ddc-b9d6-2220e19b714f" />
 
 ## Website
 
