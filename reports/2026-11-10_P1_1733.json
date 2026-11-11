@@ -1,0 +1,102 @@
+{
+  "id": "2026-11-10_P1_1733",
+  "site": "P1",
+  "site_name": "1번 정문 수로",
+  "date": "2026-11-10",
+  "start": "2026-11-10T17:33:00",
+  "end": "2026-11-10T17:36:00",
+  "rows": 4,
+  "metrics": [
+    {
+      "key": "temp_c",
+      "label": "수온",
+      "unit": "°C",
+      "limit_min": null,
+      "limit_max": null,
+      "n": 4,
+      "mean": 10.93,
+      "min": 10.76,
+      "max": 11.25,
+      "last": 10.76,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "info"
+    },
+    {
+      "key": "turb_ntu",
+      "label": "탁도",
+      "unit": "NTU",
+      "limit_min": null,
+      "limit_max": 15,
+      "n": 4,
+      "mean": 3000.4,
+      "min": 3000.4,
+      "max": 3000.4,
+      "last": 3000.4,
+      "exceed_n": 4,
+      "exceed_pct": 100,
+      "status": "bad"
+    },
+    {
+      "key": "ec_uS_cm",
+      "label": "전도도",
+      "unit": "µS/cm",
+      "limit_min": null,
+      "limit_max": null,
+      "n": 4,
+      "mean": 1705.25,
+      "min": 1014,
+      "max": 2146,
+      "last": 2146,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "info"
+    },
+    {
+      "key": "tds_ppm",
+      "label": "TDS",
+      "unit": "ppm",
+      "limit_min": null,
+      "limit_max": null,
+      "n": 4,
+      "mean": 852.5,
+      "min": 507,
+      "max": 1073,
+      "last": 1073,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "info"
+    },
+    {
+      "key": "ph",
+      "label": "pH",
+      "unit": "",
+      "limit_min": 6.5,
+      "limit_max": 8.5,
+      "n": 4,
+      "mean": 6.93,
+      "min": 6.93,
+      "max": 6.93,
+      "last": 6.93,
+      "exceed_n": 0,
+      "exceed_pct": 0,
+      "status": "good"
+    }
+  ],
+  "overall": "bad",
+  "summary": "탁도 부적합(이탈 100%)",
+  "body_md": "### 종합 판정\n2026-11-10 1번 정문 수로 지점에서 4회 측정한 결과, 종합 판정은 **부적합**임.\n\n### 항목별 결과\n- 수온: 평균 10.9°C (기준 없음, 참고값)\n- 탁도: 부적합 — 평균 3000.4 NTU, 범위 3000.4~3000.4 NTU, 기준 이탈 100%\n- 전도도: 평균 1705 µS/cm (기준 없음, 참고값)\n- TDS: 평균 853 ppm (기준 없음, 참고값)\n- pH: 적합 — 평균 6.93, 범위 6.93~6.93, 기준 이탈 0%\n\n### 권고 사항\n- 탁도 재측정 및 현장 확인 필요",
+  "writer": "template",
+  "ai_check": {
+    "ok": true
+  },
+  "generated_at": "2026-11-11T02:44:25.588Z",
+  "criteria_source": {
+    "ph": "Hardware improvement plan",
+    "turb_ntu": "Hardware improvement plan",
+    "temp_c": "Reference only",
+    "ec_uS_cm": "Reference only",
+    "tds_ppm": "Reference only",
+    "level_mm": "Reference only"
+  }
+}
